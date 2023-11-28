@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ITEducator Details</title>
+</head>
+<body>
+    <h2>ITEducator Details</h2>
+    <h2>ITEducator Details</h2>
+    <table border="1">
+        <tr>
+            <th>Field</th>
+            <th>Value</th>
+        </tr>
+        <tr>
+            <td>Name</td>
+            <td>{{ educator.ism }}</td>
+        </tr>
+        <tr>
+            <td>Last Name</td>
+            <td>{{ educator.familya }}</td>
+        </tr>
+        <tr>
+            <td>Middle Name</td>
+            <td>{{ educator.sharif }}</td>
+        </tr>
+        <tr>
+            <td>Issued Date</td>
+            <td>{{ educator.berilgan_vaqt }}</td>
+        </tr>
+        <tr>
+            <td>Overall Performance</td>
+            <td>{{ educator.umumiy_p }}</td>
+        </tr>
+        <tr>
+            <td>Overall Grade</td>
+            <td>{{ educator.umumiy_ball }}</td>
+        </tr>
+        <tr>
+            <td>Module 1 Performance</td>
+            <td>{{ educator.modul_1p }}</td>
+        </tr>
+        <tr>
+            <td>Module 1 Grade</td>
+            <td>{{ educator.modul_1_ball }}</td>
+        </tr>
+        <tr>
+            <td>Module 2 Performance</td>
+            <td>{{ educator.modul_2p }}</td>
+        </tr>
+        <tr>
+            <td>Module 2 Grade</td>
+            <td>{{ educator.modul_2_ball }}</td>
+        </tr>
+        <tr>
+            <td>Module 3 Performance</td>
+            <td>{{ educator.modul_3p }}</td>
+        </tr>
+        <tr>
+            <td>Module 3 Grade</td>
+            <td>{{ educator.modul_3_ball }}</td>
+        </tr>
+        <tr>
+            <td>Certificate ID</td>
+            <td>{{ educator.sertificate_id }}</td>
+        </tr>
+        <tr>
+            <td>Seria</td>
+            <td>{{ educator.seria }}</td>
+        </tr>
+
+    <h3>PowerPoint Slides</h3>
+    {% for slide in images %}
+        <p>Slide {{ slide.index }}</p>
+        <img src="data:image/png;base64,{{ slide.image|b64encode }}" alt="Slide {{ slide.index }}">
+    {% endfor %}
+</body>
+</html>
