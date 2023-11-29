@@ -50,6 +50,7 @@
                         <option value="FS">FS</option>
                         <option value="BD">BD</option>
                         <option value="FD">FD</option>
+                        <option value="CS">CS</option>
                     </select>
                     <input style="display: inline-block; margin-top: 10px;" class="form-control w-50 h-50" type="search" name="sertificate_id" placeholder="Search Certificate ID" aria-label="Search">
                     <button style="display: inline-block; left: 80px; margin-bottom: 20px;" class="btn btn-success" type="submit">Search</button>
@@ -89,35 +90,35 @@
                                 {% if info.familya %}
                                 <tr>
                                     <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Familyasi</th>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800">{{ info.familya }}</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800">{{ student.familya }}</td>
                                 </tr>
                                 {% endif %}
                         
                                 {% if info.sharif %}
                                 <tr>
                                     <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Sharifi</th>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800">{{ info.sharif }}</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800">{{ student.sharif }}</td>
                                 </tr>
                                 {% endif %}
                         
                                 {% if info.berilgan_vaqt %}
                                 <tr>
                                     <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Berilgan Vaqt</th>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800">{{ info.berilgan_vaqt }}</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800">{{ student.berilgan_vaqt }}</td>
                                 </tr>
                                 {% endif %}
                         
                                 {% if info.umumiy_p %}
                                 <tr>
                                     <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Umumiy %</th>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800">{{ info.umumiy_p }}</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800">{{ student.umumiy_p }}</td>
                                 </tr>
                                 {% endif %}
                         
                                 {% if info.umumiy_ball %}
                                 <tr>
                                     <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Umumiy ball</th>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800">{{ info.umumiy_ball }}</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800">{{ student.umumiy_ball }}</td>
                                 </tr>
                                 {% endif %}
                         
