@@ -76,3 +76,11 @@ class Software_Admin(ImportExportModelAdmin):
     list_display = ('ism', 'familya', 'sharif', 'seria', 'sertificate_id', 'pptx_file')
     actions = [DownloadPptxFile]
     list_filter = (('create_date', DateRangePicker), ('sertificate_id_numeric', RangeNumericFilter),)
+
+
+@admin.register(Other)
+class OtherAdmin(admin.ModelAdmin):
+    search_fields = ['ism', 'familya', 'sharif', 'sertificate_id', 'seria', ]
+    list_display = ('ism', 'familya', 'sharif', 'seria', 'sertificate_id', 'pptx_file')
+    actions = [DownloadPptxFile]
+    list_filter = (('create_date', DateRangePicker), ('sertificate_id_numeric', RangeNumericFilter),)
