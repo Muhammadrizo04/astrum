@@ -24,6 +24,14 @@ def search_certificates(request):
             info = ITEducator.objects.get(sertificate_id__iexact=sertificate_id, seria__iexact=seria)
         elif InteriorDesign.objects.filter(sertificate_id__iexact=sertificate_id, seria__iexact=seria).exists():
             info = InteriorDesign.objects.get(sertificate_id__iexact=sertificate_id, seria__iexact=seria)
+        elif FullStack.objects.filter(sertificate_id__iexact=sertificate_id, seria__iexact=seria).exists():
+            info = FullStack.objects.get(sertificate_id__iexact=sertificate_id, seria__iexact=seria)
+        elif DataSciense.objects.filter(sertificate_id__iexact=sertificate_id, seria__iexact=seria).exists():
+            info = DataSciense.objects.get(sertificate_id__iexact=sertificate_id, seria__iexact=seria)
+        elif SoftWare.objects.filter(sertificate_id__iexact=sertificate_id, seria__iexact=seria).exists():
+            info = SoftWare.objects.get(sertificate_id__iexact=sertificate_id, seria__iexact=seria)
+        elif Other.objects.filter(sertificate_id__iexact=sertificate_id, seria__iexact=seria).exists():
+            info = Other.objects.get(sertificate_id__iexact=sertificate_id, seria__iexact=seria)
 
         if info is not None:
             return render(request, 'index.html', {'info': info})
@@ -48,17 +56,21 @@ def detail_view_3d(request, sertificate_id):
 
 def detail_view_fs(request, sertificate_id):
     student = get_object_or_404(FullStack, sertificate_id=sertificate_id)
-    return render(request, 'info_mk.html', {'student': student})
+    return render(request, 'info_fs.html', {'student': student})
 
 
 def detail_view_se(request, sertificate_id):
     student = get_object_or_404(SoftWare, sertificate_id=sertificate_id)
-    return render(request, 'info_mk.html', {'student': student})
+    return render(request, 'info_se.html', {'student': student})
 
 
 def detail_view_dt(request, sertificate_id):
     student = get_object_or_404(DataSciense, sertificate_id=sertificate_id)
-    return render(request, 'info_mk.html', {'student': student})
+    return render(request, 'info_dt.html', {'student': student})
+
+def detail_view_cs(request, sertificate_id):
+    student = get_object_or_404(Other, sertificate_id=sertificate_id)
+    return render(request, 'info_cs.html', {'student': student})
 
 
 def download_file(request, filename):
