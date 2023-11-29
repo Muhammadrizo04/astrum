@@ -10,6 +10,7 @@ urlpatterns = [
     path('student/FS<str:sertificate_id>/', detail_view_fs, name='detail_view_fs'),
     path('student/SE<str:sertificate_id>/', detail_view_se, name='detail_view_se'),
     path('student/DS<str:sertificate_id>/', detail_view_dt, name='detail_view_ds'),
+    path('student/CS<str:sertificate_id>/', detail_view_cs, name='detail_view_cs'),
     path('download/<str:filename>/', download_file, name='download_file'),
 
 ]
