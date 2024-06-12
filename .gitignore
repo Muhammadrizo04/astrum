@@ -48,7 +48,7 @@ botapp/migrations
 
 # CMake
 cmake-build-*/
-
+media/
 myvenv/*
 myvenv
 myvenv/
