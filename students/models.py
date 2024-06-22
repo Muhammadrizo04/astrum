@@ -415,8 +415,8 @@ class FullStack(models.Model):
     frontend = models.CharField(blank=True, max_length=6)
     backend = models.CharField(blank=True, max_length=6)
     seria = models.CharField(max_length=3, blank=True)
-    sertificate_id = models.CharField(max_length=7, unique=True, blank=True)
-    sertificate_id_numeric = models.IntegerField(unique=True, blank=True)
+    sertificate_id = models.CharField(max_length=7, blank=True)
+    sertificate_id_numeric = models.IntegerField(blank=True)
     frontend_url = models.URLField(blank=True, null=True)
     backend_url = models.URLField(blank=True, null=True)
     frontend_qrcode = models.ImageField(upload_to='frontend_qrcode', blank=True)
@@ -438,7 +438,8 @@ class FullStack(models.Model):
             return "FS"
 
     def generate_sertificate_id(self):
-        last_student = FullStack.objects.order_by('-sertificate_id').first()
+        series_prefix = self.seria
+        last_student = FullStack.objects.filter(seria=series_prefix).order_by('-sertificate_id').first()
         if last_student and last_student.sertificate_id:
             last_id_int = int(last_student.sertificate_id)
             new_id_int = last_id_int + 1
@@ -447,7 +448,8 @@ class FullStack(models.Model):
         return "0000001"
 
     def generate_sertificate_id_numeric(self):
-        last_student = FullStack.objects.order_by('-sertificate_id_numeric').first()
+        series_prefix = self.seria
+        last_student = FullStack.objects.filter(seria=series_prefix).order_by('-sertificate_id_numeric').first()
         if last_student:
             last_id_int = last_student.sertificate_id_numeric
             new_id_int = last_id_int + 1
