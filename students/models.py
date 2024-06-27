@@ -407,7 +407,7 @@ class FullStack(models.Model):
     ism = models.CharField(max_length=50)
     familya = models.CharField(max_length=50)
     sharif = models.CharField(max_length=50)
-    berilgan_vaqt = models.CharField(max_length=200)
+    berilgan_vaqt = models.CharField(max_length=200, blank=True)
     create_date = models.DateTimeField(auto_now_add=True)
     preseason_web = models.CharField(max_length=6)
     season_arc = models.CharField(max_length=6)
@@ -676,10 +676,10 @@ class FullStack(models.Model):
 
             if self.frontend_url:
                 qr_code_img_front = os.path.join(settings.MEDIA_ROOT,
-                                                 f'frontend_qrcode/qr_code-{self.sertificate_id}.png')
+                                                 f'frontend_qrcode/qr_code--{self.sertificate_id}.png')
             if self.backend_url:
                 qr_code_img_back = os.path.join(settings.MEDIA_ROOT,
-                                                f'backend_qrcode/qr_code-{self.sertificate_id}.png')
+                                                f'backend_qrcode/qr_code--{self.sertificate_id}.png')
 
             if qr_code_img_front or qr_code_img_back:
                 output_image_path_back = os.path.join(settings.MEDIA_ROOT,
@@ -710,7 +710,7 @@ class DataSciense(models.Model):
     preseason_data = models.CharField(max_length=6)
     season_arc = models.CharField(max_length=6)
     data_science = models.CharField(blank=True, max_length=6)
-    machina_learning = models.CharField(default='0', max_length=6)
+    machina_learning = models.CharField(max_length=6, blank=True)
     seria = models.CharField(max_length=3, default='DS')
     sertificate_id = models.CharField(max_length=7, unique=True, blank=True)
     sertificate_id_numeric = models.IntegerField(unique=True, blank=True)
@@ -771,7 +771,10 @@ class DataSciense(models.Model):
             run.font.bold = True
 
     def generate_certificate(self):
-        pptx_template_path = os.path.join(settings.MEDIA_ROOT, 'template/data_science.pptx')
+        if self.machina_learning_url:
+            pptx_template_path = os.path.join(settings.MEDIA_ROOT, 'template/machine_learning.pptx')
+        else:
+            pptx_template_path = os.path.join(settings.MEDIA_ROOT, 'template/data_science.pptx')
         prs = Presentation(pptx_template_path)
 
         black_color = (0, 0, 0,)
@@ -779,7 +782,8 @@ class DataSciense(models.Model):
         text = f"{self.familya} {self.ism}  {self.sharif}"
         seria = f"{self.seria} {self.sertificate_id}"
         qr_code = os.path.join(settings.MEDIA_ROOT, f'data_qrcode/qr_code-{self.sertificate_id}.png')
-        qr_code_data = os.path.join(settings.MEDIA_ROOT, f'datascience_qrcode/qr_code-{self.sertificate_id}.png')
+        qr_code_data = os.path.join(settings.MEDIA_ROOT, f'datascience_qrcode/qr_code--{self.sertificate_id}.png')
+        qr_code_machine_learning = os.path.join(settings.MEDIA_ROOT, f'machinalr_qrcode/qr_code--{self.sertificate_id}.png')
         berilgan_vaqt_str = f"{self.berilgan_vaqt}"
         # Slayd 0
         self.add_image(prs, 0, qr_code, Inches(0.3976377953), Inches(4.7952755906), Inches(1.3))
@@ -802,6 +806,8 @@ class DataSciense(models.Model):
         self.add_text(prs, 1, Inches(3.82), Inches(4.0433070866), Inches(1), Inches(1), data_sc, 12, black_color)
         self.add_text(prs, 1, Inches(8.90), Inches(4.0433070866), Inches(1), Inches(1), machine_lr, 12, black_color)
         self.add_image(prs, 1, qr_code_data, Inches(3.3661417323), Inches(4.842519685), Inches(1.4))
+        if self.machina_learning_url:
+            self.add_image(prs, 1, qr_code_machine_learning, Inches(8.4645669291), Inches(4.842519685), Inches(1.4))
 
         # add_image(prs, slayd, png, left,top,height)
 
@@ -823,9 +829,9 @@ class DataSciense(models.Model):
 
         background.paste(qr_code, position, qr_code)
 
-        font = ImageFont.truetype(os.path.join(settings.MEDIA_ROOT, 'media/template/Gilroy-Black.ttf'), size=100)
+        font = ImageFont.truetype(os.path.join(settings.MEDIA_ROOT, 'template/Gilroy-Black.ttf'), size=100)
         draw = ImageDraw.Draw(background)
-        seria_font = ImageFont.truetype(os.path.join(settings.MEDIA_ROOT, 'media/template/Gilroy-Black.ttf'), size=45)
+        seria_font = ImageFont.truetype(os.path.join(settings.MEDIA_ROOT, 'template/Gilroy-Black.ttf'), size=45)
 
         black_color = (0, 0, 0)
         text_color = (0x54, 0x30, 0xCE)
@@ -859,9 +865,9 @@ class DataSciense(models.Model):
             backend_qrcode.putdata(new_data)
             background.paste(backend_qrcode, position_back, backend_qrcode)
 
-        font = ImageFont.truetype(os.path.join(settings.MEDIA_ROOT, 'media/template/Gilroy-Black.ttf'), size=100)
-        seria_font = ImageFont.truetype(os.path.join(settings.MEDIA_ROOT, 'media/template/Gilroy-Black.ttf'), size=50)
-        seria_font_sr = ImageFont.truetype(os.path.join(settings.MEDIA_ROOT, "media/template/Gilroy-Black.ttf"),
+        font = ImageFont.truetype(os.path.join(settings.MEDIA_ROOT, 'template/Gilroy-Black.ttf'), size=100)
+        seria_font = ImageFont.truetype(os.path.join(settings.MEDIA_ROOT, 'template/Gilroy-Black.ttf'), size=50)
+        seria_font_sr = ImageFont.truetype(os.path.join(settings.MEDIA_ROOT, "template/Gilroy-Black.ttf"),
                                            size=45)
 
         black_color = (0, 0, 0)
@@ -887,13 +893,23 @@ class DataSciense(models.Model):
             self.sertificate_id_numeric = self.generate_sertificate_id_numeric()
 
         if self.data_science_url:
-            qr_code_img_front = qrcode.make(f"{self.data_science_url}")
+            qr_code_img_datasc = qrcode.make(f"{self.data_science_url}")
             canvas = Image.new('RGB', (500, 500), 'white')
-            canvas.paste(qr_code_img_front)
+            canvas.paste(qr_code_img_datasc)
             buffer = BytesIO()
             canvas.save(buffer, format='PNG')
-            qr_code_file_name = f'qr_code-{self.sertificate_id}.png'
+            qr_code_file_name = f'qr_code--{self.sertificate_id}.png'
             self.data_science_qrcode.save(qr_code_file_name, File(buffer), save=False)
+            canvas.close()
+
+        if self.machina_learning_url:
+            qr_code_img_machinelr = qrcode.make(f"{self.machina_learning_url}")
+            canvas = Image.new('RGB', (500, 500), 'white')
+            canvas.paste(qr_code_img_machinelr)
+            buffer = BytesIO()
+            canvas.save(buffer, format='PNG')
+            qr_code_file_name = f'qr_code--{self.sertificate_id}.png'
+            self.machina_learning_qrcode.save(qr_code_file_name, File(buffer), save=False)
             canvas.close()
 
         qr_code_img = qrcode.make(f"https://certificate.astrum.uz/student/DS{self.sertificate_id}")
@@ -916,17 +932,20 @@ class DataSciense(models.Model):
             self.sertificate_front = os.path.relpath(output_image_path_front, settings.MEDIA_ROOT)
 
         if not self.sertificate_back:
-            background_image_path_back = os.path.join(settings.MEDIA_ROOT, 'template/data_science-2.png')
-            qr_code_img_front = None
-            qr_code_img_back = None
-            output_image_path_back = None
+            if self.machina_learning_url:
+                background_image_path_back = os.path.join(settings.MEDIA_ROOT, 'template/machine_learning.png')
+            else:
+                background_image_path_back = os.path.join(settings.MEDIA_ROOT, 'template/data_science-2.png')
+                qr_code_img_front = None
+                qr_code_img_back = None
+                output_image_path_back = None
 
             if self.data_science_url:
                 qr_code_img_front = os.path.join(settings.MEDIA_ROOT,
-                                                 f'datascience_qrcode/qr_code-{self.sertificate_id}.png')
+                                                 f'datascience_qrcode/qr_code--{self.sertificate_id}.png')
             if self.machina_learning_url:
                 qr_code_img_back = os.path.join(settings.MEDIA_ROOT,
-                                                f'machinalr_qrcode/qr_code-{self.sertificate_id}.png')
+                                                f'machinalr_qrcode/qr_code--{self.sertificate_id}.png')
 
             if qr_code_img_front or qr_code_img_back:
                 output_image_path_back = os.path.join(settings.MEDIA_ROOT,
