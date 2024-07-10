@@ -496,9 +496,11 @@ class FullStack(models.Model):
         text_color = (0x54, 0x30, 0xCE)
         text = f"{self.familya} {self.ism}  {self.sharif}"
         seria = f"{self.seria} {self.sertificate_id}"
-        qr_code = os.path.join(settings.MEDIA_ROOT, f'fullstack_qrcode/qr_code-{self.sertificate_id}.png')
-        qr_code_img_back = os.path.join(settings.MEDIA_ROOT, f'backend_qrcode/qr_code-{self.sertificate_id}.png')
-        qr_code_img_front = os.path.join(settings.MEDIA_ROOT, f'frontend_qrcode/qr_code-{self.sertificate_id}.png')
+        qr_code = os.path.join(settings.MEDIA_ROOT, f'fullstack_qrcode/qr_code-{self.seria}-{self.sertificate_id}.png')
+        qr_code_img_back = os.path.join(settings.MEDIA_ROOT,
+                                        f'backend_qrcode/qr_code-{self.seria}-{self.sertificate_id}.png')
+        qr_code_img_front = os.path.join(settings.MEDIA_ROOT,
+                                         f'frontend_qrcode/qr_code-{self.seria}-{self.sertificate_id}.png')
         berilgan_vaqt_str = f"{self.berilgan_vaqt}"
         # Slayd 0
         self.add_image(prs, 0, qr_code, Inches(0.3976377953), Inches(4.7952755906), Inches(1.3))
@@ -625,7 +627,7 @@ class FullStack(models.Model):
             canvas.paste(qr_code_img_front)
             buffer = BytesIO()
             canvas.save(buffer, format='PNG')
-            qr_code_file_name = f'qr_code-{self.sertificate_id}.png'
+            qr_code_file_name = f'qr_code-{self.seria}-{self.sertificate_id}.png'
             self.frontend_qrcode.save(qr_code_file_name, File(buffer), save=False)
             canvas.close()
 
@@ -635,7 +637,7 @@ class FullStack(models.Model):
             canvas.paste(qr_code_img_back)
             buffer = BytesIO()
             canvas.save(buffer, format='PNG')
-            qr_code_file_name = f'qr_code-{self.sertificate_id}.png'
+            qr_code_file_name = f'qr_code-{self.seria}-{self.sertificate_id}.png'
             self.backend_qrcode.save(qr_code_file_name, File(buffer), save=False)
             canvas.close()
 
@@ -644,7 +646,7 @@ class FullStack(models.Model):
         canvas.paste(qr_code_img)
         buffer = BytesIO()
         canvas.save(buffer, format='PNG')
-        qr_code_file_name = f'qr_code-{self.sertificate_id}.png'
+        qr_code_file_name = f'qr_code-{self.seria}-{self.sertificate_id}.png'
         self.qr_code.save(qr_code_file_name, File(buffer), save=False)
         canvas.close()
 
@@ -656,12 +658,12 @@ class FullStack(models.Model):
             elif self.frontend_url and self.backend_url:
                 background_image_path_front = os.path.join(settings.MEDIA_ROOT, 'template/Fullstack-1.png')
             qr_code_image_path_front = os.path.join(settings.MEDIA_ROOT,
-                                                    f'fullstack_qrcode/qr_code-{self.sertificate_id}.png')
+                                                    f'fullstack_qrcode/qr_code-{self.seria}-{self.sertificate_id}.png')
             output_image_path_front = os.path.join(settings.MEDIA_ROOT,
-                                                   f'fullstack_ser_front/certificate-{self.sertificate_id}.png')
+                                                   f'fullstack_ser_front/certificate-{self.seria}-{self.sertificate_id}.png')
             self.overlay_qr_code_front(background_image_path_front, qr_code_image_path_front, output_image_path_front,
                                        (115, 1435), 390)
-            self.sertificate_front = os.path.relpath(output_image_path_front, settings.MEDIA_ROOT)
+            self.sertificate_front = output_image_path_front
 
         if not self.sertificate_back:
             if not self.backend_url:
@@ -676,22 +678,18 @@ class FullStack(models.Model):
 
             if self.frontend_url:
                 qr_code_img_front = os.path.join(settings.MEDIA_ROOT,
-                                                 f'frontend_qrcode/qr_code--{self.sertificate_id}.png')
+                                                 f'frontend_qrcode/qr_code-{self.seria}-{self.sertificate_id}.png')
             if self.backend_url:
                 qr_code_img_back = os.path.join(settings.MEDIA_ROOT,
-                                                f'backend_qrcode/qr_code--{self.sertificate_id}.png')
+                                                f'backend_qrcode/qr_code-{self.seria}-{self.sertificate_id}.png')
 
-            if qr_code_img_front or qr_code_img_back:
-                output_image_path_back = os.path.join(settings.MEDIA_ROOT,
-                                                      f'fullstack_ser_back/certificate-{self.sertificate_id}.png')
+            output_image_path_back = os.path.join(settings.MEDIA_ROOT,
+                                                  f'fullstack_ser_back/certificate-{self.seria}-{self.sertificate_id}.png')
 
-                self.overlay_qr_code_back(background_image_path_back, qr_code_img_front, qr_code_img_back,
-                                          output_image_path_back, (1020, 1460), 400, (2550, 1460), 400,
-                                          is_frontend_available=bool(qr_code_img_front),
-                                          is_backend_available=bool(qr_code_img_back))
+            self.overlay_qr_code_back(background_image_path_back, qr_code_img_front, qr_code_img_back,
+                                      output_image_path_back, (1020, 1460), 400, (2550, 1460), 400)
 
-                self.sertificate_back.save(os.path.basename(output_image_path_back),
-                                           File(open(output_image_path_back, 'rb')))
+            self.sertificate_back = output_image_path_back
 
         if not self.pptx_file:
             pptx_buffer = self.generate_certificate()
@@ -705,12 +703,12 @@ class DataSciense(models.Model):
     ism = models.CharField(max_length=50)
     familya = models.CharField(max_length=50)
     sharif = models.CharField(max_length=50)
-    berilgan_vaqt = models.CharField(max_length=20)
+    berilgan_vaqt = models.CharField(max_length=20, blank=True)
     create_date = models.DateTimeField(auto_now_add=True)
     preseason_data = models.CharField(max_length=6)
     season_arc = models.CharField(max_length=6)
     data_science = models.CharField(blank=True, max_length=6)
-    machina_learning = models.CharField(max_length=6, blank=True)
+    machina_learning = models.CharField(blank=True, max_length=6)
     seria = models.CharField(max_length=3, default='DS')
     sertificate_id = models.CharField(max_length=7, unique=True, blank=True)
     sertificate_id_numeric = models.IntegerField(unique=True, blank=True)
@@ -781,9 +779,11 @@ class DataSciense(models.Model):
         text_color = (0x54, 0x30, 0xCE)
         text = f"{self.familya} {self.ism}  {self.sharif}"
         seria = f"{self.seria} {self.sertificate_id}"
-        qr_code = os.path.join(settings.MEDIA_ROOT, f'data_qrcode/qr_code-{self.sertificate_id}.png')
-        qr_code_data = os.path.join(settings.MEDIA_ROOT, f'datascience_qrcode/qr_code--{self.sertificate_id}.png')
-        qr_code_machine_learning = os.path.join(settings.MEDIA_ROOT, f'machinalr_qrcode/qr_code--{self.sertificate_id}.png')
+        qr_code = os.path.join(settings.MEDIA_ROOT, f'data_qrcode/qr_code-{self.seria}-{self.sertificate_id}.png')
+        qr_code_data = os.path.join(settings.MEDIA_ROOT,
+                                    f'datascience_qrcode/qr_code-{self.seria}-{self.sertificate_id}.png')
+        qr_code_machine_learning = os.path.join(settings.MEDIA_ROOT,
+                                                f'machinalr_qrcode/qr_code-{self.seria}-{self.sertificate_id}.png')
         berilgan_vaqt_str = f"{self.berilgan_vaqt}"
         # Slayd 0
         self.add_image(prs, 0, qr_code, Inches(0.3976377953), Inches(4.7952755906), Inches(1.3))
@@ -844,12 +844,11 @@ class DataSciense(models.Model):
         background.save(output_path)
 
     def overlay_qr_code_back(self, background_path, qr_code_path_front, qr_code_path_back, output_path, position_front,
-                             qr_size_front, position_back, qr_size_back, is_frontend_available=True,
-                             is_backend_available=True):
+                             qr_size_front, position_back, qr_size_back):
         background = Image.open(background_path)
         draw = ImageDraw.Draw(background)
 
-        if qr_code_path_front is not None and is_frontend_available:
+        if qr_code_path_front is not None:
             frontend_qrcode = Image.open(qr_code_path_front).resize((qr_size_front, qr_size_front), Image.LANCZOS)
             frontend_qrcode = frontend_qrcode.convert("RGBA")
             data = frontend_qrcode.getdata()
@@ -857,7 +856,7 @@ class DataSciense(models.Model):
             frontend_qrcode.putdata(new_data)
             background.paste(frontend_qrcode, position_front, frontend_qrcode)
 
-        if qr_code_path_back is not None and is_backend_available:
+        if qr_code_path_back is not None:
             backend_qrcode = Image.open(qr_code_path_back).resize((qr_size_back, qr_size_back), Image.LANCZOS)
             backend_qrcode = backend_qrcode.convert("RGBA")
             data = backend_qrcode.getdata()
@@ -885,12 +884,12 @@ class DataSciense(models.Model):
         background.save(output_path)
 
     def save(self, *args, **kwargs):
-
         if not self.sertificate_id:
             self.sertificate_id = self.generate_sertificate_id()
 
         if not self.sertificate_id_numeric:
             self.sertificate_id_numeric = self.generate_sertificate_id_numeric()
+        super(DataSciense, self).save(*args, **kwargs)
 
         if self.data_science_url:
             qr_code_img_datasc = qrcode.make(f"{self.data_science_url}")
@@ -898,7 +897,7 @@ class DataSciense(models.Model):
             canvas.paste(qr_code_img_datasc)
             buffer = BytesIO()
             canvas.save(buffer, format='PNG')
-            qr_code_file_name = f'qr_code--{self.sertificate_id}.png'
+            qr_code_file_name = f'qr_code-{self.seria}-{self.sertificate_id}.png'
             self.data_science_qrcode.save(qr_code_file_name, File(buffer), save=False)
             canvas.close()
 
@@ -908,58 +907,57 @@ class DataSciense(models.Model):
             canvas.paste(qr_code_img_machinelr)
             buffer = BytesIO()
             canvas.save(buffer, format='PNG')
-            qr_code_file_name = f'qr_code--{self.sertificate_id}.png'
+            qr_code_file_name = f'qr_code-{self.seria}-{self.sertificate_id}.png'
             self.machina_learning_qrcode.save(qr_code_file_name, File(buffer), save=False)
             canvas.close()
 
-        qr_code_img = qrcode.make(f"https://certificate.astrum.uz/student/DS{self.sertificate_id}")
-        canvas = Image.new('RGB', (380, 380), 'white')
-        canvas.paste(qr_code_img)
-        buffer = BytesIO()
-        canvas.save(buffer, format='PNG')
-        qr_code_file_name = f'qr_code-{self.sertificate_id}.png'
-        self.qr_code.save(qr_code_file_name, File(buffer), save=False)
-        canvas.close()
+        qr_code_file_name = f'qr_code-{self.seria}-{self.sertificate_id}.png'
+        qr_code_path = os.path.join(settings.MEDIA_ROOT, 'data_qrcode', qr_code_file_name)
+
+        if not os.path.exists(qr_code_path):
+            qr_code_img = qrcode.make(f"https://certificate.astrum.uz/student/DS{self.sertificate_id}")
+            canvas = Image.new('RGB', (380, 380), 'white')
+            canvas.paste(qr_code_img)
+            buffer = BytesIO()
+            canvas.save(buffer, format='PNG')
+            self.qr_code.save(qr_code_file_name, File(buffer), save=False)
+            canvas.close()
 
         if not self.sertificate_front:
             background_image_path_front = os.path.join(settings.MEDIA_ROOT, 'template/data_science-1.png')
             qr_code_image_path_front = os.path.join(settings.MEDIA_ROOT,
-                                                    f'data_qrcode/qr_code-{self.sertificate_id}.png')
+                                                    f'data_qrcode/qr_code-{self.seria}-{self.sertificate_id}.png')
             output_image_path_front = os.path.join(settings.MEDIA_ROOT,
-                                                   f'data_ser_front/certificate-{self.sertificate_id}.png')
+                                                   f'data_ser_front/certificate-{self.seria}-{self.sertificate_id}.png')
             self.overlay_qr_code_front(background_image_path_front, qr_code_image_path_front, output_image_path_front,
                                        (115, 1435), 390)
             self.sertificate_front = os.path.relpath(output_image_path_front, settings.MEDIA_ROOT)
 
         if not self.sertificate_back:
+            qr_code_img_front = None
+            qr_code_img_back = None
             if self.machina_learning_url:
                 background_image_path_back = os.path.join(settings.MEDIA_ROOT, 'template/machine_learning.png')
-            else:
+            if self.data_science_url:
                 background_image_path_back = os.path.join(settings.MEDIA_ROOT, 'template/data_science-2.png')
-                qr_code_img_front = None
-                qr_code_img_back = None
-                output_image_path_back = None
 
             if self.data_science_url:
                 qr_code_img_front = os.path.join(settings.MEDIA_ROOT,
-                                                 f'datascience_qrcode/qr_code--{self.sertificate_id}.png')
+                                                 f'datascience_qrcode/qr_code-{self.seria}-{self.sertificate_id}.png')
             if self.machina_learning_url:
                 qr_code_img_back = os.path.join(settings.MEDIA_ROOT,
-                                                f'machinalr_qrcode/qr_code--{self.sertificate_id}.png')
+                                                f'machinalr_qrcode/qr_code-{self.seria}-{self.sertificate_id}.png')
 
             if qr_code_img_front or qr_code_img_back:
                 output_image_path_back = os.path.join(settings.MEDIA_ROOT,
-                                                      f'data_ser_back/certificate-{self.sertificate_id}.png')
+                                                      f'data_ser_back/certificate-{self.seria}-{self.sertificate_id}.png')
 
                 # Set the coordinates for "Not Available" text
 
                 self.overlay_qr_code_back(background_image_path_back, qr_code_img_front, qr_code_img_back,
-                                          output_image_path_back, (1020, 1460), 400, (2550, 1460), 400,
-                                          is_frontend_available=bool(qr_code_img_front),
-                                          is_backend_available=bool(qr_code_img_back))
+                                          output_image_path_back, (1020, 1460), 400, (2550, 1460), 400)
 
-                self.sertificate_back.save(os.path.basename(output_image_path_back),
-                                           File(open(output_image_path_back, 'rb')))
+                self.sertificate_back = os.path.relpath(output_image_path_back, settings.MEDIA_ROOT)
 
         if not self.pptx_file:
             pptx_buffer = self.generate_certificate()
@@ -1221,6 +1219,7 @@ class SoftWare(models.Model):
 
         super(SoftWare, self).save(*args, **kwargs)
 
+
 class Other(models.Model):
     ism = models.CharField(max_length=50)
     familya = models.CharField(max_length=50)
@@ -1237,12 +1236,10 @@ class Other(models.Model):
         return self.ism
 
 
-
-
 class CyberSecurity(models.Model):
     ism = models.CharField(max_length=50)
     familya = models.CharField(max_length=50)
-    sharif = models.CharField(max_length=50,blank=True)
+    sharif = models.CharField(max_length=50, blank=True)
     berilgan_vaqt = models.CharField(max_length=200)
     seria = models.CharField(max_length=3, default='CS')
     sertificate_id = models.CharField(max_length=7, unique=True, blank=True)
@@ -1250,7 +1247,6 @@ class CyberSecurity(models.Model):
     pptx_file = models.FileField(upload_to='pptx_cyber_security', blank=True)
     sertificate_front = models.FileField(upload_to='cyber_security_front/', blank=True)
     qr_code = models.ImageField(upload_to='cyber_security_qrcode/', blank=True)
-
 
     def generate_sertificate_id(self):
         last_student = CyberSecurity.objects.order_by('-sertificate_id').first()
@@ -1268,7 +1264,7 @@ class CyberSecurity(models.Model):
             new_id_int = last_id_int + 1
             return new_id_int
         return 6
-    
+
     def add_image(self, prs, slide_index, image_path, left, top, height):
         slide = prs.slides[slide_index]
         image = Image.open(image_path)
@@ -1296,7 +1292,6 @@ class CyberSecurity(models.Model):
         for run in text.runs:
             run.font.bold = True
 
-
     def generate_certificate(self):
         pptx_template_path = os.path.join(settings.MEDIA_ROOT, 'template/cyber_security.pptx')
         prs = Presentation(pptx_template_path)
@@ -1319,7 +1314,6 @@ class CyberSecurity(models.Model):
         pptx_buffer.seek(0)
 
         return pptx_buffer
-
 
     def overlay_qr_code_front(self, background_path, qr_code_path, output_path, position, qr_size):
         background = Image.open(background_path)
@@ -1345,8 +1339,6 @@ class CyberSecurity(models.Model):
         draw.text((1450, 1785), f"{self.berilgan_vaqt}", fill=black_color, font=seria_font)
 
         background.save(output_path)
-
-
 
     def save(self, *args, **kwargs):
 
@@ -1376,8 +1368,8 @@ class CyberSecurity(models.Model):
             self.sertificate_front = os.path.relpath(output_image_path_front, settings.MEDIA_ROOT)
 
         if not self.pptx_file:
-                pptx_buffer = self.generate_certificate()
-                self.pptx_file.save(f'{self.seria}-{self.sertificate_id}-{self.familya}-{self.ism}-{self.sharif}.pptx',
-                                    ContentFile(pptx_buffer.read()), save=False)
+            pptx_buffer = self.generate_certificate()
+            self.pptx_file.save(f'{self.seria}-{self.sertificate_id}-{self.familya}-{self.ism}-{self.sharif}.pptx',
+                                ContentFile(pptx_buffer.read()), save=False)
 
         super(CyberSecurity, self).save(*args, **kwargs)
