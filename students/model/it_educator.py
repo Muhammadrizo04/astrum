@@ -1,4 +1,3 @@
-import time
 from django.db import models
 import qrcode
 from io import BytesIO
@@ -246,10 +245,8 @@ class ITEducator(models.Model):
                                                   f'malaka_ser_back/certificate-{self.certificate_id}.png')
             self.overlay_qr_code_back(background_image_path_back, qr_code_image_path_back, output_image_path_back,
                                       (2535, 1445), 390)
-            self.certificate_back = os.path.relpath(output_image_path_back, settings.MEDIA_ROOT)
 
-            self.certificate_back.save(os.path.basename(output_image_path_back),
-                                       File(open(output_image_path_back, 'rb')))
+            self.certificate_back = output_image_path_back
 
         if not self.pptx_file:
             pptx_buffer = self.generate_certificate()

@@ -1,15 +1,8 @@
-import mimetypes
-
-from django.shortcuts import render, get_object_or_404, redirect
+from django.shortcuts import get_object_or_404
 from .models import *
-from django.db.models import Q
-from django.http import HttpResponse, FileResponse
-import csv
-from io import TextIOWrapper
-from datetime import datetime
+from django.http import FileResponse
 from django.shortcuts import render
-from io import BytesIO
-from .forms import SearchForm
+from .model import ITEducator, InteriorDesign, FullStack
 
 
 def search_certificates(request):
@@ -69,25 +62,12 @@ def detail_view_dt(request, sertificate_id):
 
 
 def detail_view_cs(request, sertificate_id):
-    student_cs = get_object_or_404(CyberSecurity,sertificate_id=sertificate_id)
+    student_cs = get_object_or_404(CyberSecurity, sertificate_id=sertificate_id)
     return render(request, 'info_cs.html', {'student_cs': student_cs})
 
+
 def detail_view_na(request, sertificate_id):
-    student_na = get_object_or_404(Other,sertificate_id=sertificate_id)
+    student_na = get_object_or_404(Other, sertificate_id=sertificate_id)
     return render(request, 'info_na.html', {'student_na': student_na})
 
 
-def download_file(request, filename):
-    # Define Django project base directory
-    BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-    # Define the full file path
-    filepath = os.path.join(BASE_DIR, 'static', 'test', filename)
-
-    # Set the return value of the FileResponse
-    response = FileResponse(open(filepath, 'rb'))
-    # Set the mime type
-    response['Content-Type'] = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-    # Set the HTTP header for sending to the browser
-    response['Content-Disposition'] = "attachment; filename=%s" % filename
-    # Return the response value
-    return response

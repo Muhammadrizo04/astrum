@@ -6,7 +6,7 @@ from django.contrib import admin, messages
 from .actions import *
 from django_admin_filters import DateRange, DateRangePicker
 from admin_numeric_filter.admin import RangeNumericFilter
-from .model import ITEducator, InteriorDesign
+from .model import ITEducator, InteriorDesign, FullStack
 
 
 class ITEducatorResource(resources.ModelResource):
@@ -46,10 +46,10 @@ class FullStackResource(resources.ModelResource):
 @admin.register(FullStack)
 class FullstackAdmin(ImportExportModelAdmin):
     resource_class = FullStackResource
-    search_fields = ['ism', 'familya', 'sharif', 'sertificate_id', 'seria', ]
-    list_display = ('ism', 'familya', 'sharif', 'seria', 'sertificate_id',)
+    search_fields = ['first_name', 'last_name', 'middle_name', 'certificate_id', 'series', ]
+    list_display = ('first_name', 'last_name', 'middle_name', 'series', 'certificate_id',)
     actions = [DownloadPptxFile]
-    list_filter = (('create_date', DateRangePicker), ('sertificate_id_numeric', RangeNumericFilter),)
+    list_filter = (('create_date', DateRangePicker), ('certificate_id_numeric', RangeNumericFilter),)
 
 
 class DataScienseResource(resources.ModelResource):
