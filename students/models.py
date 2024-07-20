@@ -611,85 +611,85 @@ from django.core.files.base import ContentFile
 #
 #         background.save(output_path)
 #
-#     def save(self, *args, **kwargs):
-#         if not self.seria:
-#             self.seria = self.generate_seria()
-#
-#         if not self.sertificate_id:
-#             self.sertificate_id = self.generate_sertificate_id()
-#
-#         if not self.sertificate_id_numeric:
-#             self.sertificate_id_numeric = self.generate_sertificate_id_numeric()
-#
-#         if self.frontend_url:
-#             qr_code_img_front = qrcode.make(f"{self.frontend_url}")
-#             canvas = Image.new('RGB', (500, 500), 'white')
-#             canvas.paste(qr_code_img_front)
-#             buffer = BytesIO()
-#             canvas.save(buffer, format='PNG')
-#             qr_code_file_name = f'qr_code-{self.seria}-{self.sertificate_id}.png'
-#             self.frontend_qrcode.save(qr_code_file_name, File(buffer), save=False)
-#             canvas.close()
-#
-#         if self.backend_url:
-#             qr_code_img_back = qrcode.make(f"{self.backend_url}")
-#             canvas = Image.new('RGB', (500, 500), 'white')
-#             canvas.paste(qr_code_img_back)
-#             buffer = BytesIO()
-#             canvas.save(buffer, format='PNG')
-#             qr_code_file_name = f'qr_code-{self.seria}-{self.sertificate_id}.png'
-#             self.backend_qrcode.save(qr_code_file_name, File(buffer), save=False)
-#             canvas.close()
-#
-#         qr_code_img = qrcode.make(f"https://certificate.astrum.uz/student/FS{self.sertificate_id}")
-#         canvas = Image.new('RGB', (380, 380), 'white')
-#         canvas.paste(qr_code_img)
-#         buffer = BytesIO()
-#         canvas.save(buffer, format='PNG')
-#         qr_code_file_name = f'qr_code-{self.seria}-{self.sertificate_id}.png'
-#         self.qr_code.save(qr_code_file_name, File(buffer), save=False)
-#         canvas.close()
-#
-#         if not self.sertificate_front:
-#             if not self.backend_url:
-#                 background_image_path_front = os.path.join(settings.MEDIA_ROOT, 'template/frontend-1.png')
-#             elif not self.frontend_url:
-#                 background_image_path_front = os.path.join(settings.MEDIA_ROOT, 'template/backend-1.png')
-#             elif self.frontend_url and self.backend_url:
-#                 background_image_path_front = os.path.join(settings.MEDIA_ROOT, 'template/Fullstack-1.png')
-#             qr_code_image_path_front = os.path.join(settings.MEDIA_ROOT,
-#                                                     f'fullstack_qrcode/qr_code-{self.seria}-{self.sertificate_id}.png')
-#             output_image_path_front = os.path.join(settings.MEDIA_ROOT,
-#                                                    f'fullstack_ser_front/certificate-{self.seria}-{self.sertificate_id}.png')
-#             self.overlay_qr_code_front(background_image_path_front, qr_code_image_path_front, output_image_path_front,
-#                                        (115, 1435), 390)
-#             self.sertificate_front = output_image_path_front
-#
-#         if not self.sertificate_back:
-#             if not self.backend_url:
-#                 background_image_path_back = os.path.join(settings.MEDIA_ROOT, 'template/frontend-2.png')
-#             if not self.frontend_url:
-#                 background_image_path_back = os.path.join(settings.MEDIA_ROOT, 'template/backend-2.png')
-#             elif self.frontend_url and self.backend_url:
-#                 background_image_path_back = os.path.join(settings.MEDIA_ROOT, 'template/Fullstack-2.png')
-#             qr_code_img_front = None
-#             qr_code_img_back = None
-#             output_image_path_back = None
-#
-#             if self.frontend_url:
-#                 qr_code_img_front = os.path.join(settings.MEDIA_ROOT,
-#                                                  f'frontend_qrcode/qr_code-{self.seria}-{self.sertificate_id}.png')
-#             if self.backend_url:
-#                 qr_code_img_back = os.path.join(settings.MEDIA_ROOT,
-#                                                 f'backend_qrcode/qr_code-{self.seria}-{self.sertificate_id}.png')
-#
-#             output_image_path_back = os.path.join(settings.MEDIA_ROOT,
-#                                                   f'fullstack_ser_back/certificate-{self.seria}-{self.sertificate_id}.png')
-#
-#             self.overlay_qr_code_back(background_image_path_back, qr_code_img_front, qr_code_img_back,
-#                                       output_image_path_back, (1020, 1460), 400, (2550, 1460), 400)
-#
-#             self.sertificate_back = output_image_path_back
+    # def save(self, *args, **kwargs):
+    #     if not self.seria:
+    #         self.seria = self.generate_seria()
+    #
+    #     if not self.sertificate_id:
+    #         self.sertificate_id = self.generate_sertificate_id()
+    #
+    #     if not self.sertificate_id_numeric:
+    #         self.sertificate_id_numeric = self.generate_sertificate_id_numeric()
+    #
+    #     if self.frontend_url:
+    #         qr_code_img_front = qrcode.make(f"{self.frontend_url}")
+    #         canvas = Image.new('RGB', (500, 500), 'white')
+    #         canvas.paste(qr_code_img_front)
+    #         buffer = BytesIO()
+    #         canvas.save(buffer, format='PNG')
+    #         qr_code_file_name = f'qr_code-{self.seria}-{self.sertificate_id}.png'
+    #         self.frontend_qrcode.save(qr_code_file_name, File(buffer), save=False)
+    #         canvas.close()
+    #
+    #     if self.backend_url:
+    #         qr_code_img_back = qrcode.make(f"{self.backend_url}")
+    #         canvas = Image.new('RGB', (500, 500), 'white')
+    #         canvas.paste(qr_code_img_back)
+    #         buffer = BytesIO()
+    #         canvas.save(buffer, format='PNG')
+    #         qr_code_file_name = f'qr_code-{self.seria}-{self.sertificate_id}.png'
+    #         self.backend_qrcode.save(qr_code_file_name, File(buffer), save=False)
+    #         canvas.close()
+    #
+    #     qr_code_img = qrcode.make(f"https://certificate.astrum.uz/student/FS{self.sertificate_id}")
+    #     canvas = Image.new('RGB', (380, 380), 'white')
+    #     canvas.paste(qr_code_img)
+    #     buffer = BytesIO()
+    #     canvas.save(buffer, format='PNG')
+    #     qr_code_file_name = f'qr_code-{self.seria}-{self.sertificate_id}.png'
+    #     self.qr_code.save(qr_code_file_name, File(buffer), save=False)
+    #     canvas.close()
+    #
+    #     if not self.sertificate_front:
+    #         if not self.backend_url:
+    #             background_image_path_front = os.path.join(settings.MEDIA_ROOT, 'template/frontend-1.png')
+    #         elif not self.frontend_url:
+    #             background_image_path_front = os.path.join(settings.MEDIA_ROOT, 'template/backend-1.png')
+    #         elif self.frontend_url and self.backend_url:
+    #             background_image_path_front = os.path.join(settings.MEDIA_ROOT, 'template/Fullstack-1.png')
+    #         qr_code_image_path_front = os.path.join(settings.MEDIA_ROOT,
+    #                                                 f'fullstack_qrcode/qr_code-{self.seria}-{self.sertificate_id}.png')
+    #         output_image_path_front = os.path.join(settings.MEDIA_ROOT,
+    #                                                f'fullstack_ser_front/certificate-{self.seria}-{self.sertificate_id}.png')
+    #         self.overlay_qr_code_front(background_image_path_front, qr_code_image_path_front, output_image_path_front,
+    #                                    (115, 1435), 390)
+    #         self.sertificate_front = output_image_path_front
+    #
+    #     if not self.sertificate_back:
+    #         if not self.backend_url:
+    #             background_image_path_back = os.path.join(settings.MEDIA_ROOT, 'template/frontend-2.png')
+    #         if not self.frontend_url:
+    #             background_image_path_back = os.path.join(settings.MEDIA_ROOT, 'template/backend-2.png')
+    #         elif self.frontend_url and self.backend_url:
+    #             background_image_path_back = os.path.join(settings.MEDIA_ROOT, 'template/Fullstack-2.png')
+    #         qr_code_img_front = None
+    #         qr_code_img_back = None
+    #         output_image_path_back = None
+    #
+    #         if self.frontend_url:
+    #             qr_code_img_front = os.path.join(settings.MEDIA_ROOT,
+    #                                              f'frontend_qrcode/qr_code-{self.seria}-{self.sertificate_id}.png')
+    #         if self.backend_url:
+    #             qr_code_img_back = os.path.join(settings.MEDIA_ROOT,
+    #                                             f'backend_qrcode/qr_code-{self.seria}-{self.sertificate_id}.png')
+    #
+    #         output_image_path_back = os.path.join(settings.MEDIA_ROOT,
+    #                                               f'fullstack_ser_back/certificate-{self.seria}-{self.sertificate_id}.png')
+    #
+    #         self.overlay_qr_code_back(background_image_path_back, qr_code_img_front, qr_code_img_back,
+    #                                   output_image_path_back, (1020, 1460), 400, (2550, 1460), 400)
+    #
+    #         self.sertificate_back = output_image_path_back
 #
 #         if not self.pptx_file:
 #             pptx_buffer = self.generate_certificate()
@@ -911,18 +911,18 @@ class DataSciense(models.Model):
             self.machina_learning_qrcode.save(qr_code_file_name, File(buffer), save=False)
             canvas.close()
 
-        # qr_code_file_name = f'qr_code-{self.seria}-{self.sertificate_id}.png'
-        # qr_code_path = os.path.join(settings.MEDIA_ROOT, 'data_qrcode', qr_code_file_name)
-        #
-        # if not os.path.exists(qr_code_path):
-        qr_code_img = qrcode.make(f"https://certificate.astrum.uz/student/DS{self.sertificate_id}")
-        canvas = Image.new('RGB', (380, 380), 'white')
-        canvas.paste(qr_code_img)
-        buffer = BytesIO()
-        canvas.save(buffer, format='PNG')
         qr_code_file_name = f'qr_code-{self.seria}-{self.sertificate_id}.png'
-        self.qr_code.save(qr_code_file_name, File(buffer), save=False)
-        canvas.close()
+        qr_code_path = os.path.join(settings.MEDIA_ROOT, 'data_qrcode', qr_code_file_name)
+
+        if not os.path.exists(qr_code_path):
+            qr_code_img = qrcode.make(f"https://certificate.astrum.uz/student/DS{self.sertificate_id}")
+            canvas = Image.new('RGB', (380, 380), 'white')
+            canvas.paste(qr_code_img)
+            buffer = BytesIO()
+            canvas.save(buffer, format='PNG')
+            # qr_code_file_name = f'qr_code-{self.seria}-{self.sertificate_id}.png'
+            self.qr_code.save(qr_code_file_name, File(buffer), save=False)
+            canvas.close()
 
         if not self.sertificate_front:
             background_image_path_front = os.path.join(settings.MEDIA_ROOT, 'template/data_science-1.png')

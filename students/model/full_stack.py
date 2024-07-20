@@ -255,12 +255,12 @@ class FullStack(models.Model):
             self.backend_qrcode.save(qr_code_file_name, File(buffer), save=False)
             canvas.close()
 
-        qr_code_img = qrcode.make(f"https://certificate.astrum.uz/student/FS{self.certificate_id}")
+        qr_code_img = qrcode.make(f"172.20.31.57:8000/student/{self.series}{self.certificate_id}")
         canvas = Image.new('RGB', (380, 380), 'white')
         canvas.paste(qr_code_img)
         buffer = BytesIO()
         canvas.save(buffer, format='PNG')
-        qr_code_file_name = f'qr_code-{self.series}-{self.certificate_id}.png'
+        qr_code_file_name = f'qr_code   -{self.series}-{self.certificate_id}.png'
         self.qr_code.save(qr_code_file_name, File(buffer), save=False)
         canvas.close()
 

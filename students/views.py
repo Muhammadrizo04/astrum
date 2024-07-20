@@ -46,9 +46,19 @@ def detail_view_3d(request, sertificate_id):
     return render(request, 'info_3d.html', {'student_3d': student_3d})
 
 
-def detail_view_fs(request, sertificate_id):
-    student_fs = get_object_or_404(FullStack, sertificate_id=sertificate_id)
+def detail_view_fs(request, certificate_id):
+    student_fs = get_object_or_404(FullStack, certificate_id=certificate_id, series='FS')
     return render(request, 'info_fs.html', {'student_fs': student_fs})
+
+
+def detail_view_fd(request, certificate_id):
+    student_fd = get_object_or_404(FullStack, certificate_id=certificate_id, series='FD')
+    return render(request, 'info_fd.html', {'student_fd': student_fd})
+
+
+def detail_view_bd(request, certificate_id):
+    student_bd = get_object_or_404(FullStack, certificate_id=certificate_id, series='BD')
+    return render(request, 'info_bd.html', {'student_bd': student_bd})
 
 
 def detail_view_se(request, sertificate_id):
@@ -69,5 +79,3 @@ def detail_view_cs(request, sertificate_id):
 def detail_view_na(request, sertificate_id):
     student_na = get_object_or_404(Other, sertificate_id=sertificate_id)
     return render(request, 'info_na.html', {'student_na': student_na})
-
-
