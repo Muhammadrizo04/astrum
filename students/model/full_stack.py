@@ -14,8 +14,8 @@ from django.core.files.base import ContentFile
 
 
 class FullStack(models.Model):
-    first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
+    first_name = models.CharField(max_length=50)
     middle_name = models.CharField(max_length=50)
     issue_date = models.CharField(max_length=200, blank=True)
     create_date = models.DateTimeField(auto_now_add=True)

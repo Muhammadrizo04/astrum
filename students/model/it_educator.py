@@ -14,8 +14,8 @@ from django.core.files.base import ContentFile
 
 
 class ITEducator(models.Model):
-    first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
+    first_name = models.CharField(max_length=50)
     middle_name = models.CharField(max_length=200)
     issue_date = models.CharField(max_length=200)
     expiration_date = models.CharField(max_length=200)
@@ -112,33 +112,22 @@ class ITEducator(models.Model):
 
         # Slide 1
 
-        module_1_percentage = f"{self.module_1_percentage }%"
         module_1_score = f"{self.module_1_score} ball/ points"
-        module_2_percentage = f"{self.module_2_percentage}%"
         module_2_score = f"{self.module_2_score} ball/ points"
-        module_3_percentage = f"{self.module_3_percentage}%"
         module_3_score = f"{self.module_3_score} ball/ points"
-        overall_percentage = f"{self.overall_percentage}%"
         overall_score = f"{self.overall_score} ball/ points"
 
         self.add_text(prs, 1, Inches(0.54), Inches(0.028), Inches(1), Inches(0.8), series, 11, black_color)
         self.add_text(prs, 1, Inches(1), Inches(0.75), Inches(8), Inches(1), text, 28, text_color,
                       alignment=PP_ALIGN.CENTER)
-        self.add_text(prs, 1, Inches(2.3622047244), Inches(3.8307086614), Inches(1.7440944882), Inches(0.3346456693),
-                      module_1_percentage, 14, black_color)  # Module 1
-        self.add_text(prs, 1, Inches(2.3622047244), Inches(3.594488189), Inches(1.7440944882), Inches(0.3346456693),
+
+        self.add_text(prs, 1, Inches(2.44), Inches(3.74), Inches(1.7440944882), Inches(0.3346456693),
                       module_1_score, 14, black_color)  # Module 1 Score
-        self.add_text(prs, 1, Inches(2.3622047244), Inches(4.7480314961), Inches(1.7440944882), Inches(0.3346456693),
-                      module_2_percentage, 14, black_color)  # Module 2
-        self.add_text(prs, 1, Inches(2.3622047244), Inches(4.5118110236), Inches(1.7440944882), Inches(0.3346456693),
+        self.add_text(prs, 1, Inches(2.44), Inches(4.61), Inches(1.7440944882), Inches(0.3346456693),
                       module_2_score, 14, black_color)  # Module 2 Score
-        self.add_text(prs, 1, Inches(2.3622047244), Inches(5.6692913386), Inches(1.7440944882), Inches(0.3346456693),
-                      module_3_percentage, 14, black_color)  # Module 3
-        self.add_text(prs, 1, Inches(2.3622047244), Inches(5.4330708661), Inches(1.7440944882), Inches(0.3346456693),
+        self.add_text(prs, 1, Inches(2.44), Inches(5.55), Inches(1.7440944882), Inches(0.3346456693),
                       module_3_score, 14, black_color)  # Module 3 Score
-        self.add_text(prs, 1, Inches(6.3385826772), Inches(4.6456692913), Inches(1.7440944882), Inches(0.3346456693),
-                      overall_percentage, 14, black_color)  # Overall Percentage
-        self.add_text(prs, 1, Inches(6.3385826772), Inches(3.7007874016), Inches(1.7440944882), Inches(0.3346456693),
+        self.add_text(prs, 1, Inches(6.3385826772), Inches(3.7), Inches(1.7440944882), Inches(0.3346456693),
                       overall_score, 14, black_color)  # Overall Score
         self.add_image(prs, 1, qr_code_img_back, Inches(8.4448818898), Inches(4.8385826772), Inches(1.3))
 
@@ -199,14 +188,10 @@ class ITEducator(models.Model):
         text = f"{self.last_name} {self.first_name}  {self.middle_name}"
         draw.text((1500, 440), text, fill=text_color, anchor="ms", font=font)
         draw.text((190, 128), f"{self.series} {self.certificate_id}", fill=black_color, font=seria_font_sr)
-        draw.text((770, 1190), f"{self.module_1_score} ball/ points", fill=black_color, font=seria_font)
-        draw.text((770, 1260), f"{self.module_1_percentage}%", fill=black_color, font=seria_font)
-        draw.text((770, 1480), f"{self.module_2_score} ball/ points", fill=black_color, font=seria_font)
-        draw.text((770, 1540), f"{self.module_2_percentage}%", fill=black_color, font=seria_font)
-        draw.text((770, 1740), f"{self.module_2_score} ball/ points", fill=black_color, font=seria_font)
-        draw.text((770, 1810), f"{self.module_3_percentage}%", fill=black_color, font=seria_font)
-        draw.text((2000, 1230), f"{self.module_3_score} ball/ points", fill=black_color, font=seria_font)
-        draw.text((2000, 1520), f"{self.overall_percentage}%", fill=black_color, font=seria_font)
+        draw.text((770, 1220), f"{self.module_1_score} ball/ points", fill=black_color, font=seria_font)
+        draw.text((770, 1510), f"{self.module_2_score} ball/ points", fill=black_color, font=seria_font)
+        draw.text((770, 1770), f"{self.module_3_score} ball/ points", fill=black_color, font=seria_font)
+        draw.text((1940, 1240), f"{self.overall_score} ball/ points", fill=black_color, font=seria_font)
 
         background.save(output_path)
 
@@ -250,7 +235,8 @@ class ITEducator(models.Model):
 
         if not self.pptx_file:
             pptx_buffer = self.generate_certificate()
-            self.pptx_file.save(f'{self.series}-{self.certificate_id}-{self.last_name}-{self.first_name}-{self.middle_name}.pptx',
-                                ContentFile(pptx_buffer.read()), save=False)
+            self.pptx_file.save(
+                f'{self.series}-{self.certificate_id}-{self.last_name}-{self.first_name}-{self.middle_name}.pptx',
+                ContentFile(pptx_buffer.read()), save=False)
 
         super(ITEducator, self).save(*args, **kwargs)

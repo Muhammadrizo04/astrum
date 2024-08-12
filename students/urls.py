@@ -11,6 +11,7 @@ urlpatterns = [
     path('student/SE<str:sertificate_id>/', detail_view_se, name='detail_view_se'),
     path('student/DS<str:sertificate_id>/', detail_view_dt, name='detail_view_ds'),
     path('student/CS<str:sertificate_id>/', detail_view_cs, name='detail_view_cs'),
+    path('student/<str:seria>-<str:sertificate_id>/', detail_view_other, name='detail_view_other'),
     path('student/NA<str:sertificate_id>/', detail_view_na, name='detail_view_na'),
     path('student/FD<str:certificate_id>/', detail_view_fd, name='detail_view_fd'),
     path('student/BD<str:certificate_id>/', detail_view_bd, name='detail_view_bd'),

@@ -2,8 +2,7 @@ from django.shortcuts import get_object_or_404
 from .models import *
 from django.http import FileResponse
 from django.shortcuts import render
-from .model import ITEducator, InteriorDesign, FullStack
-
+from .model import *
 
 def search_certificates(request):
     if 'sertificate_id' in request.GET and 'seria' in request.GET:
@@ -25,6 +24,8 @@ def search_certificates(request):
             info = SoftWare.objects.get(sertificate_id__iexact=sertificate_id, seria__iexact=seria)
         elif Other.objects.filter(sertificate_id__iexact=sertificate_id, seria__iexact=seria).exists():
             info = Other.objects.get(sertificate_id__iexact=sertificate_id, seria__iexact=seria)
+        elif NetworkAdmin.objects.filter(sertificate_id__iexact=sertificate_id, seria__iexact=seria).exists():
+            info = NetworkAdmin.objects.get(sertificate_id__iexact=sertificate_id, seria__iexact=seria)
 
         if info is not None:
             return render(request, 'sertificate.html', {'info': info})
@@ -77,5 +78,10 @@ def detail_view_cs(request, sertificate_id):
 
 
 def detail_view_na(request, sertificate_id):
-    student_na = get_object_or_404(Other, sertificate_id=sertificate_id)
+    student_na = get_object_or_404(NetworkAdmin, sertificate_id=sertificate_id)
     return render(request, 'info_na.html', {'student_na': student_na})
+
+
+def detail_view_other(request, seria, sertificate_id):
+    student_other = get_object_or_404(Other, seria=seria, sertificate_id=sertificate_id)
+    return render(request, 'info_other.html', {'student_other': student_other})

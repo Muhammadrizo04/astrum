@@ -1,4 +1,3 @@
-import time
 from django.db import models
 import qrcode
 from io import BytesIO
@@ -13,45 +12,41 @@ from pptx.enum.text import PP_ALIGN
 from pptx import Presentation
 from django.core.files.base import ContentFile
 
-
-class InteriorDesign(models.Model):
-    last_name = models.CharField(max_length=50)
-    first_name = models.CharField(max_length=50)
-    middle_name = models.CharField(max_length=50)
-    issue_date = models.CharField(max_length=200)
-    create_date = models.DateTimeField(auto_now_add=True)
-    series = models.CharField(max_length=3, default='3D')
-    certificate_id = models.CharField(max_length=7, unique=True, blank=True)
-    certificate_id_numeric = models.IntegerField(unique=True, blank=True)
-    qr_code = models.ImageField(upload_to='3D_qrcode/', blank=True)
-    pptx_file = models.FileField(upload_to='pptx_3D', blank=True)
-    certificate_front = models.FileField(upload_to='3D_ser_front/', blank=True)
+class NetworkAdmin(models.Model):
+    ism = models.CharField(max_length=50)
+    familya = models.CharField(max_length=50)
+    sharif = models.CharField(max_length=50)
+    berilgan_vaqt = models.CharField(max_length=12)
+    amal_qilish = models.CharField(max_length=12)
+    seria = models.CharField(max_length=3, default='NA')
+    sertificate_id = models.CharField(max_length=7, unique=True, blank=True)
+    sertificate_id_numeric = models.IntegerField(unique=True, blank=True)
+    pptx_file = models.FileField(upload_to='pptx_networkadmin', blank=True)
+    qr_code = models.ImageField(upload_to='ccna_qrcode/', blank=True)
+    sertificate_front = models.FileField(upload_to='networkadmin_ser_front/', blank=True)
 
     def __str__(self):
-        return self.first_name
+        return self.ism
 
-    @staticmethod
-    def generate_certificate_id():
-        last_student = InteriorDesign.objects.order_by('-certificate_id').first()
-        if last_student:
-            last_id_int = int(last_student.certificate_id)
-            if last_id_int >= 1:
-                new_id_int = last_id_int + 1
-                new_id_str = str(new_id_int).zfill(7)
-                return new_id_str
+
+    def generate_sertificate_id(self):
+        last_student = NetworkAdmin.objects.order_by('-sertificate_id').first()
+        if last_student and last_student.sertificate_id:
+            last_id_int = int(last_student.sertificate_id)
+            new_id_int = last_id_int + 1
+            new_id_str = str(new_id_int).zfill(7)
+            return new_id_str
         return "0000001"
 
-    @staticmethod
-    def generate_certificate_id_numeric():
-        last_student = InteriorDesign.objects.order_by('-certificate_id_numeric').first()
+    def generate_sertificate_id_numeric(self):
+        last_student = NetworkAdmin.objects.order_by('-sertificate_id_numeric').first()
         if last_student:
-            last_id_int = last_student.certificate_id_numeric
+            last_id_int = last_student.sertificate_id_numeric
             new_id_int = last_id_int + 1
             return new_id_int
-        return 1
+        return 6
 
-    @staticmethod
-    def add_image(prs, slide_index, image_path, left, top, height):
+    def add_image(self, prs, slide_index, image_path, left, top, height):
         slide = prs.slides[slide_index]
         image = Image.open(image_path)
         image = image.convert('RGBA')
@@ -64,8 +59,7 @@ class InteriorDesign(models.Model):
         image_stream.seek(0)
         slide.shapes.add_picture(image_stream, left, top, height=height)
 
-    @staticmethod
-    def add_text(prs, slide_index, left, top, width, height, input_text, font_size, font_color,
+    def add_text(self, prs, slide_index, left, top, width, height, input_text, font_size, font_color,
                  font_name='Gilroy', alignment=PP_ALIGN.LEFT):
         slide = prs.slides[slide_index]
         text_box = slide.shapes.add_textbox(left, top, width, height)
@@ -80,21 +74,23 @@ class InteriorDesign(models.Model):
             run.font.bold = True
 
     def generate_certificate(self):
-        pptx_template_path = os.path.join(settings.MEDIA_ROOT, 'template/3D.pptx')
+        pptx_template_path = os.path.join(settings.MEDIA_ROOT, 'template/ccna.pptx')
         prs = Presentation(pptx_template_path)
 
         black_color = (0, 0, 0,)
         text_color = (0x54, 0x30, 0xCE)
-        text = f"{self.last_name} {self.first_name}  {self.middle_name}"
-        series = f"{self.series} {self.certificate_id}"
-        qr_code = os.path.join(settings.MEDIA_ROOT, f'3D_qrcode/qr_code-{self.certificate_id}.png')
-        issue_date = f"{self.issue_date}"
+        text = f"{self.familya} {self.ism}  {self.sharif}"
+        seria = f"{self.seria} {self.sertificate_id}"
+        qr_code = os.path.join(settings.MEDIA_ROOT, f'ccna_qrcode/qr_code-{self.sertificate_id}.png')
+        berilgan = f"{self.berilgan_vaqt}"
+        amal_qilish = f"{self.amal_qilish}"
 
         self.add_image(prs, 0, qr_code, Inches(0.3858267717), Inches(4.7834645669), Inches(1.3))
         self.add_text(prs, 0, Inches(1), Inches(2.55), Inches(8), Inches(1), text, 28, text_color,
                       alignment=PP_ALIGN.CENTER)
-        self.add_text(prs, 0, Inches(4.37), Inches(5.64), Inches(1), Inches(1), issue_date, 11, black_color, )
-        self.add_text(prs, 0, Inches(2.55), Inches(5.64), Inches(1), Inches(1), series, 11, black_color)
+        self.add_text(prs, 0, Inches(5.04), Inches(5.65), Inches(1), Inches(1), amal_qilish, 12, black_color, )
+        self.add_text(prs, 0, Inches(3.86), Inches(5.65), Inches(1), Inches(1), berilgan, 12, black_color, )
+        self.add_text(prs, 0, Inches(2.6), Inches(5.66), Inches(1), Inches(1), seria, 11, black_color, )
 
         pptx_buffer = BytesIO()
         prs.save(pptx_buffer)
@@ -120,44 +116,44 @@ class InteriorDesign(models.Model):
         black_color = (0, 0, 0)
         text_color = (0x54, 0x30, 0xCE)
 
-        text = f"{self.last_name} {self.first_name}  {self.middle_name}"
+        text = f"{self.familya} {self.ism}  {self.sharif}"
         draw.text((1500, 980), text, fill=text_color, anchor="ms", font=font)
-        draw.text((800, 1810), f"{self.series} {self.certificate_id}", fill=black_color, font=seria_font)
-        draw.text((1350, 1810), f"{self.issue_date}", fill=black_color, font=seria_font)
+        draw.text((800, 1810), f"{self.seria} {self.sertificate_id}", fill=black_color, font=seria_font)
+        draw.text((1190, 1810), f"{self.berilgan_vaqt}", fill=black_color, font=seria_font)
+        draw.text((1540, 1810), f"{self.amal_qilish }", fill=black_color, font=seria_font)
 
         background.save(output_path)
 
     def save(self, *args, **kwargs):
 
-        if not self.certificate_id:
-            self.certificate_id = self.generate_certificate_id()
+        if not self.sertificate_id:
+            self.sertificate_id = self.generate_sertificate_id()
 
-        if not self.certificate_id_numeric:
-            self.certificate_id_numeric = self.generate_certificate_id_numeric()
+        if not self.sertificate_id_numeric:
+            self.sertificate_id_numeric = self.generate_sertificate_id_numeric()
 
-        # Here, on which link you need to create a qr code, put that link
-        qr_code_img = qrcode.make(f"https://certificate.astrum.uz/student/3D{self.certificate_id}")
+        qr_code_img = qrcode.make(f"https://certificate.astrum.uz/student/NA{self.sertificate_id}")
         canvas = Image.new('RGB', (380, 380), 'white')
         canvas.paste(qr_code_img)
         buffer = BytesIO()
         canvas.save(buffer, format='PNG')
-        qr_code_file_name = f'qr_code-{self.certificate_id}.png'
+        qr_code_file_name = f'qr_code-{self.sertificate_id}.png'
         self.qr_code.save(qr_code_file_name, File(buffer), save=False)
         canvas.close()
 
-        if not self.certificate_front:
-            background_image_path_front = os.path.join(settings.MEDIA_ROOT, 'template/3D.png')
+        if not self.sertificate_front:
+            background_image_path_front = os.path.join(settings.MEDIA_ROOT, 'template/ccna.png')
             qr_code_image_path_front = os.path.join(settings.MEDIA_ROOT,
-                                                    f'3D_qrcode/qr_code-{self.certificate_id}.png')
+                                                    f'ccna_qrcode/qr_code-{self.sertificate_id}.png')
             output_image_path_front = os.path.join(settings.MEDIA_ROOT,
-                                                   f'3D_ser_front/certificate-{self.certificate_id}.png')
+                                                   f'networkadmin_ser_front/certificate-{self.sertificate_id}.png')
             self.overlay_qr_code_front(background_image_path_front, qr_code_image_path_front, output_image_path_front,
                                        (115, 1435), 390)
-            self.certificate_front = os.path.relpath(output_image_path_front, settings.MEDIA_ROOT)
+            self.sertificate_front = os.path.relpath(output_image_path_front, settings.MEDIA_ROOT)
 
         if not self.pptx_file:
             pptx_buffer = self.generate_certificate()
-            self.pptx_file.save(f'{self.series}-{self.certificate_id}-{self.last_name}-{self.first_name}-{self.middle_name}.pptx',
+            self.pptx_file.save(f'{self.seria}-{self.sertificate_id}-{self.familya}-{self.ism}-{self.sharif}.pptx',
                                 ContentFile(pptx_buffer.read()), save=False)
 
-        super(InteriorDesign, self).save(*args, **kwargs)
+        super(NetworkAdmin, self).save(*args, **kwargs)

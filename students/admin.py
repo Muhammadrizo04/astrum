@@ -6,7 +6,7 @@ from django.contrib import admin, messages
 from .actions import *
 from django_admin_filters import DateRange, DateRangePicker
 from admin_numeric_filter.admin import RangeNumericFilter
-from .model import ITEducator, InteriorDesign, FullStack
+from .model import *
 
 
 class ITEducatorResource(resources.ModelResource):
@@ -72,12 +72,26 @@ class SoftWareResource(resources.ModelResource):
 
 
 @admin.register(SoftWare)
-class Software_Admin(ImportExportModelAdmin):
+class SoftwareAdmin(ImportExportModelAdmin):
     resource_class = SoftWareResource
     search_fields = ['ism', 'familya', 'sharif', 'sertificate_id', 'seria', ]
     list_display = ('ism', 'familya', 'sharif', 'seria', 'sertificate_id',)
     actions = [DownloadPptxFile]
     list_filter = (('create_date', DateRangePicker), ('sertificate_id_numeric', RangeNumericFilter),)
+
+
+class NetworkAdminResource(resources.ModelResource):
+    class Meta:
+        model = NetworkAdmin
+
+
+@admin.register(NetworkAdmin)
+class NetworkAdminAdmin(ImportExportModelAdmin):
+    resource_class = NetworkAdminResource
+    search_fields = ['ism', 'familya', 'sharif', 'sertificate_id', 'seria', ]
+    list_display = ('ism', 'familya', 'sharif', 'seria', 'sertificate_id',)
+    actions = [DownloadPptxFile]
+    list_filter = (('sertificate_id_numeric', RangeNumericFilter),)
 
 
 @admin.register(Other)
