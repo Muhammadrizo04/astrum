@@ -15,5 +15,6 @@ urlpatterns = [
     path('student/NA<str:sertificate_id>/', detail_view_na, name='detail_view_na'),
     path('student/FD<str:certificate_id>/', detail_view_fd, name='detail_view_fd'),
     path('student/BD<str:certificate_id>/', detail_view_bd, name='detail_view_bd'),
+    path('download/<str:filename>/', download_file, name='download_file'),
 
 ]
