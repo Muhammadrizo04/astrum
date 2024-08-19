@@ -86,3 +86,19 @@ def detail_view_na(request, sertificate_id):
 def detail_view_other(request, seria, sertificate_id):
     student_other = get_object_or_404(Other, seria=seria, sertificate_id=sertificate_id)
     return render(request, 'info_other.html', {'student_other': student_other})
+
+
+def download_file(request, filename):
+    # Define Django project base directory
+    BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    # Define the full file path
+    filepath = os.path.join(BASE_DIR, 'static', 'test', filename)
+
+    # Set the return value of the FileResponse
+    response = FileResponse(open(filepath, 'rb'))
+    # Set the mime type
+    response['Content-Type'] = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+    # Set the HTTP header for sending to the browser
+    response['Content-Disposition'] = "attachment; filename=%s" % filename
+    # Return the response value
+    return response
