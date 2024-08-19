@@ -30,7 +30,8 @@ class NetworkAdmin(models.Model):
     def __str__(self):
         return self.first_name
 
-    def generate_certificate_id(self):
+    @staticmethod
+    def generate_certificate_id():
         last_student = NetworkAdmin.objects.order_by('-certificate_id').first()
         if last_student and last_student.certificate_id:
             last_id_int = int(last_student.certificate_id)
@@ -39,7 +40,8 @@ class NetworkAdmin(models.Model):
             return new_id_str
         return "0000001"
 
-    def generate_certificate_id_numeric(self):
+    @staticmethod
+    def generate_certificate_id_numeric():
         last_student = NetworkAdmin.objects.order_by('-certificate_id_numeric').first()
         if last_student:
             last_id_int = last_student.certificate_id_numeric
@@ -47,7 +49,8 @@ class NetworkAdmin(models.Model):
             return new_id_int
         return 6
 
-    def add_image(self, prs, slide_index, image_path, left, top, height):
+    @staticmethod
+    def add_image(prs, slide_index, image_path, left, top, height):
         slide = prs.slides[slide_index]
         image = Image.open(image_path)
         image = image.convert('RGBA')
@@ -60,7 +63,8 @@ class NetworkAdmin(models.Model):
         image_stream.seek(0)
         slide.shapes.add_picture(image_stream, left, top, height=height)
 
-    def add_text(self, prs, slide_index, left, top, width, height, input_text, font_size, font_color,
+    @staticmethod
+    def add_text(prs, slide_index, left, top, width, height, input_text, font_size, font_color,
                  font_name='Gilroy', alignment=PP_ALIGN.LEFT):
         slide = prs.slides[slide_index]
         text_box = slide.shapes.add_textbox(left, top, width, height)
@@ -80,7 +84,7 @@ class NetworkAdmin(models.Model):
 
         black_color = (0, 0, 0,)
         text_color = (0x54, 0x30, 0xCE)
-        text = f"{self.last_name} {self.first_name}  {self.sharif}"
+        text = f"{self.last_name} {self.first_name}  {self.middle_name}"
         series = f"{self.series} {self.certificate_id}"
         qr_code = os.path.join(settings.MEDIA_ROOT, f'ccna_qrcode/qr_code-{self.certificate_id}.png')
         berilgan = f"{self.issue_date}"
@@ -117,7 +121,7 @@ class NetworkAdmin(models.Model):
         black_color = (0, 0, 0)
         text_color = (0x54, 0x30, 0xCE)
 
-        text = f"{self.last_name} {self.first_name}  {self.sharif}"
+        text = f"{self.last_name} {self.first_name}  {self.middle_name}"
         draw.text((1500, 980), text, fill=text_color, anchor="ms", font=font)
         draw.text((800, 1810), f"{self.series} {self.certificate_id}", fill=black_color, font=series_font)
         draw.text((1190, 1810), f"{self.issue_date}", fill=black_color, font=series_font)
@@ -154,7 +158,8 @@ class NetworkAdmin(models.Model):
 
         if not self.pptx_file:
             pptx_buffer = self.generate_certificate()
-            self.pptx_file.save(f'{self.series}-{self.certificate_id}-{self.last_name}-{self.first_name}-{self.sharif}.pptx',
-                                ContentFile(pptx_buffer.read()), save=False)
+            self.pptx_file.save(
+                f'{self.series}-{self.certificate_id}-{self.last_name}-{self.first_name}-{self.middle_name}.pptx',
+                ContentFile(pptx_buffer.read()), save=False)
 
         super(NetworkAdmin, self).save(*args, **kwargs)

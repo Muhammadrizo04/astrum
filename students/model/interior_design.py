@@ -1,4 +1,3 @@
-import time
 from django.db import models
 import qrcode
 from io import BytesIO
@@ -28,7 +27,7 @@ class InteriorDesign(models.Model):
     certificate_front = models.FileField(upload_to='3D_ser_front/', blank=True)
 
     def __str__(self):
-        return self.Ism
+        return self.first_name
 
     @staticmethod
     def generate_certificate_id():
