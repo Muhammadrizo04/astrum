@@ -4,6 +4,7 @@ from django.http import FileResponse
 from django.shortcuts import render
 from .model import *
 
+
 def search_certificates(request):
     if 'sertificate_id' in request.GET and 'seria' in request.GET:
         sertificate_id = request.GET['sertificate_id']

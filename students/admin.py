@@ -88,18 +88,18 @@ class NetworkAdminResource(resources.ModelResource):
 @admin.register(NetworkAdmin)
 class NetworkAdminAdmin(ImportExportModelAdmin):
     resource_class = NetworkAdminResource
-    search_fields = ['ism', 'familya', 'sharif', 'sertificate_id', 'seria', ]
-    list_display = ('ism', 'familya', 'sharif', 'seria', 'sertificate_id',)
+    search_fields = ['first_name', 'last_name', 'middle_name', 'certificate_id', 'series', ]
+    list_display = ('first_name', 'last_name', 'middle_name', 'series', 'certificate_id',)
     actions = [DownloadPptxFile]
-    list_filter = (('sertificate_id_numeric', RangeNumericFilter),)
+    list_filter = (('create_date', DateRangePicker), ('certificate_id_numeric', RangeNumericFilter),)
 
 
 @admin.register(Other)
 class OtherAdmin(admin.ModelAdmin):
-    search_fields = ['ism', 'familya', 'sharif', 'sertificate_id', 'seria', ]
-    list_display = ('ism', 'familya', 'sharif', 'seria', 'sertificate_id',)
+    search_fields = ['first_name', 'last_name', 'middle_name', 'certificate_id', 'series', ]
+    list_display = ('first_name', 'last_name', 'expiration_date', 'middle_name', 'series', 'certificate_id',)
     actions = [DownloadPptxFile]
-    list_filter = (('create_date', DateRangePicker), ('sertificate_id_numeric', RangeNumericFilter),)
+    list_filter = (('create_date', DateRangePicker), ('certificate_id_numeric', RangeNumericFilter),)
 
 
 class CyberSecurityResource(resources.ModelResource):
@@ -110,7 +110,7 @@ class CyberSecurityResource(resources.ModelResource):
 @admin.register(CyberSecurity)
 class CyberSecurityAdmin(ImportExportModelAdmin):
     resource_class = CyberSecurityResource
-    search_fields = ['ism', 'familya', 'sharif', 'sertificate_id', 'seria', ]
-    list_display = ('ism', 'familya', 'sharif', 'seria', 'sertificate_id',)
+    search_fields = ['first_name', 'last_name', 'middle_name', 'certificate_id', 'series', ]
+    list_display = ('first_name', 'last_name', 'middle_name', 'series', 'certificate_id',)
     actions = [DownloadPptxFile]
-    list_filter = (('sertificate_id_numeric', RangeNumericFilter),)
+    list_filter = (('certificate_id_numeric', RangeNumericFilter),)

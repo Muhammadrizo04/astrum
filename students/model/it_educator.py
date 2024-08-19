@@ -14,8 +14,8 @@ from django.core.files.base import ContentFile
 
 
 class ITEducator(models.Model):
-    last_name = models.CharField(max_length=50)
     first_name = models.CharField(max_length=50)
+    last_name = models.CharField(max_length=50)
     middle_name = models.CharField(max_length=200)
     issue_date = models.CharField(max_length=200)
     expiration_date = models.CharField(max_length=200)
@@ -96,7 +96,7 @@ class ITEducator(models.Model):
 
         black_color = (0, 0, 0,)
         text_color = (0x54, 0x30, 0xCE)
-        text = f"{self.last_name} {self.first_name} {self.middle_name}"
+        text = f"{self.Familya} {self.Ism} {self.middle_name}"
         series = f"{self.series} {self.certificate_id}"
         qr_code = os.path.join(settings.MEDIA_ROOT, f'malaka_qrcode/qr_code-{self.certificate_id}.png')
         qr_code_img_back = os.path.join(settings.MEDIA_ROOT, f'malaka_qrcode/qr_code-{self.certificate_id}.png')
@@ -159,7 +159,7 @@ class ITEducator(models.Model):
         black_color = (0, 0, 0)
         text_color = (0x54, 0x30, 0xCE)
 
-        text = f"{self.last_name} {self.first_name}  {self.middle_name}"
+        text = f"{self.Familya} {self.Ism}  {self.middle_name}"
         draw.text((1500, 980), text, fill=text_color, anchor="ms", font=font)
         draw.text((800, 1810), f"{self.series} {self.certificate_id}", fill=black_color, font=seria_font)
         draw.text((1190, 1810), f"{self.issue_date}", fill=black_color, font=seria_font)
@@ -185,7 +185,7 @@ class ITEducator(models.Model):
 
         black_color = (0, 0, 0)
         text_color = (0x54, 0x30, 0xCE)
-        text = f"{self.last_name} {self.first_name}  {self.middle_name}"
+        text = f"{self.Familya} {self.Ism}  {self.middle_name}"
         draw.text((1500, 440), text, fill=text_color, anchor="ms", font=font)
         draw.text((190, 128), f"{self.series} {self.certificate_id}", fill=black_color, font=seria_font_sr)
         draw.text((770, 1220), f"{self.module_1_score} ball/ points", fill=black_color, font=seria_font)
@@ -236,7 +236,7 @@ class ITEducator(models.Model):
         if not self.pptx_file:
             pptx_buffer = self.generate_certificate()
             self.pptx_file.save(
-                f'{self.series}-{self.certificate_id}-{self.last_name}-{self.first_name}-{self.middle_name}.pptx',
+                f'{self.series}-{self.certificate_id}-{self.Familya}-{self.Ism}-{self.middle_name}.pptx',
                 ContentFile(pptx_buffer.read()), save=False)
 
         super(ITEducator, self).save(*args, **kwargs)
