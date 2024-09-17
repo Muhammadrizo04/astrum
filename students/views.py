@@ -1,4 +1,6 @@
 from django.shortcuts import get_object_or_404
+
+from .model.python import Python
 from .models import *
 from django.http import FileResponse
 from django.shortcuts import render
@@ -27,6 +29,8 @@ def search_certificates(request):
             info = Other.objects.get(sertificate_id__iexact=sertificate_id, seria__iexact=seria)
         elif NetworkAdmin.objects.filter(sertificate_id__iexact=sertificate_id, seria__iexact=seria).exists():
             info = NetworkAdmin.objects.get(sertificate_id__iexact=sertificate_id, seria__iexact=seria)
+        elif Python.objects.filter(sertificate_id__iexact=sertificate_id, seria__iexact=seria).exists():
+            info = Python.objects.get(sertificate_id__iexact=sertificate_id, seria__iexact=seria)
 
         if info is not None:
             return render(request, 'sertificate.html', {'info': info})
@@ -86,6 +90,11 @@ def detail_view_na(request, sertificate_id):
 def detail_view_other(request, seria, sertificate_id):
     student_other = get_object_or_404(Other, seria=seria, sertificate_id=sertificate_id)
     return render(request, 'info_other.html', {'student_other': student_other})
+
+
+def detail_view_python(request, seria, sertificate_id):
+    student_python = get_object_or_404(Python, series=seria, sertificate_id=sertificate_id)
+    return render(request, 'python.html', {'student_python': student_python})
 
 
 def download_file(request, filename):

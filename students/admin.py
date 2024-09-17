@@ -1,4 +1,6 @@
 from django.http import HttpResponse
+
+from .model.python import Python
 from .models import *
 from import_export import resources
 from import_export.admin import ImportExportModelAdmin
@@ -114,3 +116,17 @@ class CyberSecurityAdmin(ImportExportModelAdmin):
     list_display = ('first_name', 'last_name', 'middle_name', 'series', 'certificate_id',)
     actions = [DownloadPptxFile]
     list_filter = (('certificate_id_numeric', RangeNumericFilter),)
+
+
+class PythonResource(resources.ModelResource):
+    class Meta:
+        model = Python
+
+
+@admin.register(Python)
+class PythonAdmin(ImportExportModelAdmin):
+    resource_class = PythonResource
+    search_fields = ['first_name', 'last_name', 'middle_name', 'certificate_id', 'series', ]
+    list_display = ('first_name', 'last_name', 'middle_name', 'series', 'certificate_id',)
+    actions = [DownloadPptxFile]
+    list_filter = (('certificate_id_numeric', RangeNumericFilter), ('create_date', DateRangePicker), )
