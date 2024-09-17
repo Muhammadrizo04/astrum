@@ -2,7 +2,7 @@ from django.http import HttpResponse
 from zipfile import ZipFile
 import io
 
-
+"""clear action for full stack"""
 # def clear_student_fields(modeladmin, request, queryset):
 #     for student in queryset:
 #         student.frontend_qrcode = None

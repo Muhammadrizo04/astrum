@@ -937,10 +937,10 @@ class DataSciense(models.Model):
         if not self.sertificate_back:
             qr_code_img_front = None
             qr_code_img_back = None
-            if self.machina_learning_url:
-                background_image_path_back = os.path.join(settings.MEDIA_ROOT, 'template/machine_learning.png')
-            if self.data_science_url:
+            if not self.machina_learning_url:
                 background_image_path_back = os.path.join(settings.MEDIA_ROOT, 'template/data_science-2.png')
+            if self.data_science_url:
+                background_image_path_back = os.path.join(settings.MEDIA_ROOT, 'template/machine_learning.png')
 
             if self.data_science_url:
                 qr_code_img_front = os.path.join(settings.MEDIA_ROOT,

@@ -85,14 +85,12 @@ class CyberSecurity(models.Model):
         series = f"{self.series} {self.certificate_id}"
         qr_code = os.path.join(settings.MEDIA_ROOT, f'cyber_security_qrcode/qr_code-{self.certificate_id}.png')
         issue_date = f"{self.issue_date}"
-        expiration_date = f"{self.expiration_date}"
 
         self.add_image(prs, 0, qr_code, Inches(0.3858267717), Inches(4.7834645669), Inches(1.3))
         self.add_text(prs, 0, Inches(1), Inches(2.55), Inches(8), Inches(1), text, 28, text_color,
                       alignment=PP_ALIGN.CENTER)
-        self.add_text(prs, 0, Inches(5.04), Inches(5.65), Inches(1), Inches(1), expiration_date, 12, black_color, )
-        self.add_text(prs, 0, Inches(3.86), Inches(5.65), Inches(1), Inches(1), issue_date, 12, black_color, )
-        self.add_text(prs, 0, Inches(2.6), Inches(5.66), Inches(1), Inches(1), series, 11, black_color, )
+        self.add_text(prs, 0, Inches(4.61), Inches(5.63), Inches(1), Inches(1), issue_date, 12, black_color, )
+        self.add_text(prs, 0, Inches(2.56), Inches(5.63), Inches(1), Inches(1), series, 11, black_color, )
 
         pptx_buffer = BytesIO()
         prs.save(pptx_buffer)
@@ -121,8 +119,7 @@ class CyberSecurity(models.Model):
         text = f"{self.last_name} {self.first_name}  {self.middle_name}"
         draw.text((1500, 980), text, fill=text_color, anchor="ms", font=font)
         draw.text((800, 1810), f"{self.series} {self.certificate_id}", fill=black_color, font=series_font)
-        draw.text((1190, 1810), f"{self.issue_date}", fill=black_color, font=series_font)
-        draw.text((1540, 1810), f"{self.expiration_date}", fill=black_color, font=series_font)
+        draw.text((1410, 1810), f"{self.issue_date}", fill=black_color, font=series_font)
 
         background.save(output_path)
 
